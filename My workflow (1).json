@@ -1,0 +1,555 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1d345efc-99c8-4ed6-87da-5a172d4603e2",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1FTkLtCefG7Zf3-E7R7yZyRlYXOJaOJsVmYUii1Mnzlk/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Topics",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FTkLtCefG7Zf3-E7R7yZyRlYXOJaOJsVmYUii1Mnzlk/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "status",
+              "lookupValue": "finished"
+            },
+            {
+              "lookupColumn": "Posted?",
+              "lookupValue": "false"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "bdd77677-9066-4d9c-b148-ea9b33b41590",
+      "name": "Get Content",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "lQHaeagKeD8YOz8m",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=You are an expert social media copywriter.\nWrite a high-performing caption for the topic: “{{ $json.Topic }}”.\nThe video features ultra-realistic, AI-generated ASMR content where glass objects are being sliced with a knife.\nMake it scroll-stopping, short, and engaging.\n\nGenerate a short, non-generic caption for each platform. Captions must follow exact max-lengths and these best practices:\n\n• X Shorts (max 280 chars)  \n  – Hook first  \n  – 1–2 hashtags  \n  – Add GIF/video or emoji sparingly  \n\n• LinkedIn Shorts (max 3000 chars)  \n  – Start with value (tip/stat)  \n  – Use short lines or bullets  \n  – Tag people/companies  \n  – End with a clear CTA  \n\n• Facebook Reels (max 2200 chars)  \n  – First 125 chars must punch  \n  – Use line breaks or emojis  \n  – Include CTA within first 125  \n  – 2–3 relevant hashtags  \n\n• TikTok (max 4000 chars)  \n  – Lead with CTA or question  \n  – 3–5 trending hashtags  \n  – Tag collaborators  \n  – Sprinkle emojis for tone  \n\n• Instagram Reels (max 2200 chars)  \n  – First 125 chars show before “more”  \n  – Use emojis/line breaks  \n  – Up to 10 hashtags at end  \n  – Tag accounts and location  \n\n• Threads (max 500 chars)  \n  – Keep it concise  \n  – 1–2 hashtags  \n  – Use emoji to set tone  \n  – Ask a quick question or poll  \n\n• Pinterest Video Pins (max 800 chars)  \n  – Top keywords in first 40 chars  \n  – Clear CTA (“Learn more”)  \n  – Natural, conversational tone  \n  – Use line breaks to highlight points  \n\n• Bluesky (max 300 chars)  \n  – Plain text with 1–2 hashtags  \n  – Link or key info in first 100 chars  \n  – Add an emoji for mood  \n\n• YouTube Shorts \n  – 100 chars max for the caption\n  – Include 2–3 hashtags (#Shorts, topic)  \n\nOutput only valid JSON. \n\nExample output:\n\n{\n  \"X Shorts\":\"…\",\n  \"LinkedIn Shorts\":\"…\",\n  \"Facebook Reels\":\"…\",\n  \"TikTok\":\"…\",\n  \"Instagram Reels\":\"…\",\n  \"Threads\":\"…\",\n  \"Pinterest Video Pins\":\"…\",\n  \"Bluesky\":\"…\",\n  \"YouTube Shorts\":\"…\"\n}\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "ab3e7d46-ecce-4b91-aec3-1d6ae7b2ea2e",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "x2VLWi0I25QGHRPg",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"api_key\": \"<API KEY>\",\n  \"instagram_id\": \"<account id>\",\n  \"youtube_id\": \"<account id>\",\n  \"tiktok_id\": \"<account id>\",\n  \"facebook_id\": \"<account id>\",\n  \"facebook_page_id\": \"<account id>\",\n  \"threads_id\": \"<account id>\",\n  \"twitter_id\": \"<account id>\",\n  \"linkedin_id\": \"<account id>\",\n  \"pinterest_id\": \"<account id>\",\n  \"pinterest_board_id\": \"<account id>\",\n  \"bluesky_id\": \"<account id>\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        768,
+        0
+      ],
+      "id": "32049bd7-35f3-4515-8eaf-7fdfe49f2ea7",
+      "name": "Account IDs"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/media",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "value": "="
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "={{ $('Get Content').item.json.video }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "<VIDEO_URL>"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        976,
+        0
+      ],
+      "id": "8733f101-4622-4012-999c-5567a07d3fb1",
+      "name": "Video Upload to Blotato"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key"
+            },
+            {}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "=keypair",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "{\n    \"post\": {\n      \"accountId\": \"<INSTAGRAM_ACCOUNT_ID>\",\n      \"target\": { \"targetType\": \"instagram\" },\n      \"content\": {\n        \"text\": \"{{ $node[\"Captions Agent\"].json.message.content[\"Instagram Reels\"].replace(/\\n/g, \\n) }}\",\n        \"platform\": \"instagram\",\n        \"mediaUrls\": [\"<MEDIA_URL>\"]\n      }\n    }\n  }"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1296,
+        -368
+      ],
+      "id": "106d4838-2c60-4636-b15c-30f957a83047",
+      "name": "Instagram"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "="
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"post\": {\n    \"accountId\": \"<YOUTUBE ACCOUNT ID>\",\n    \"target\": {\n      \"targetType\": \"youtube\",\n      \"title\": \"<CAPTIONS>\",\n      \"privacyStatus\": \"unlisted\",\n      \"shouldNotifySubscribers\": \"false\"\n    },\n    \"content\": {\n      \"text\": \"<CAPTIONS>\",\n      \"platform\": \"youtube\",\n      \"mediaUrls\": [\n        \"<MEDIA URL>\"\n      ]\n    }\n  }\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1296,
+        -144
+      ],
+      "id": "0e8218ae-32f1-48f4-a32e-fb497a22a83c",
+      "name": "Post to Youtube"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "<YOUR_API_KEY>"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"post\": {\n    \"accountId\": \"<FACEBOOK_PAGE_ID>\",\n    \"target\": {\n      \"targetType\": \"facebook\"\n    },\n    \"content\": {\n      \"text\": \"<FACEBOOK_MESSAGE>\",\n      \"platform\": \"facebook\",\n      \"mediaUrls\": [\n        \"<MEDIA_URL>\"\n      ]\n    }\n  }\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1296,
+        80
+      ],
+      "id": "18d88542-f3ab-43f8-99c9-88a959efb9d9",
+      "name": "Post to Facebook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "<YOUR_API_KEY>"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"post\": {\n    \"accountId\": \"<LINKEDIN_ACCOUNT_ID>\",\n    \"target\": {\n      \"targetType\": \"linkedin\"\n    },\n    \"content\": {\n      \"text\": \"<LINKEDIN_TEXT>\",\n      \"platform\": \"linkedin\",\n      \"mediaUrls\": [\n        \"<MEDIA_URL>\"\n      ]\n    }\n  }\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1296,
+        272
+      ],
+      "id": "90c868c7-b963-43e8-9cb4-f28ea0f33d7a",
+      "name": "Post to LinkdIn"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1616,
+        -16
+      ],
+      "id": "a1867ed1-2169-4fa2-ba15-dc134a5c90dd",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1FTkLtCefG7Zf3-E7R7yZyRlYXOJaOJsVmYUii1Mnzlk/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Topics",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FTkLtCefG7Zf3-E7R7yZyRlYXOJaOJsVmYUii1Mnzlk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Topic": "topic",
+            "Posted?": "TRUE"
+          },
+          "matchingColumns": [
+            "Topic"
+          ],
+          "schema": [
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "video",
+              "displayName": "video",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Posted?",
+              "displayName": "Posted?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1840,
+        16
+      ],
+      "id": "236154b6-a7d9-41fe-b03f-6c7d4f0d4f86",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "lQHaeagKeD8YOz8m",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Get Content": [
+      {
+        "json": {
+          "row_number": 7,
+          "Topic": "watermelon",
+          "status": "finished",
+          "video": "https://drive.google.com/uc?export=download&id=1fdHhyLy9s-_8jNxuOvODHjefrC5taT1V",
+          "Posted?": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Content": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Account IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Account IDs": {
+      "main": [
+        [
+          {
+            "node": "Video Upload to Blotato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video Upload to Blotato": {
+      "main": [
+        [
+          {
+            "node": "Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to Youtube",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to Facebook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to LinkdIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to LinkdIn": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Post to Facebook": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Post to Youtube": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "844a6302-01c7-4c62-8646-0f5910b446a8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ad626932609fb1b3b2981f42b2c56f57a628b3723eb7c825dc091b47fccce70b"
+  },
+  "id": "xI4OeDuQUR5BVAj6",
+  "tags": []
+}
